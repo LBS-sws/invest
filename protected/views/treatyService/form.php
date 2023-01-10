@@ -107,8 +107,8 @@ $this->pageTitle=Yii::app()->name . ' - TreatyService Form';
                 <?php echo $form->labelEx($model,'rate_government',array('class'=>"col-lg-2 control-label")); ?>
                 <div class="col-lg-2">
                     <?php
-                    echo $form->textField($model,"rate_government",
-                        array('readonly'=>($model->scenario=='view'),'append'=>'%'));
+                    echo $form->numberField($model,"rate_government",
+                        array('readonly'=>($model->scenario=='view'),'min'=>0,'append'=>'%'));
                     ?>
                 </div>
             </div>
@@ -132,15 +132,15 @@ $this->pageTitle=Yii::app()->name . ' - TreatyService Form';
                 <?php echo $form->labelEx($model,'annual_money',array('class'=>"col-lg-2 control-label")); ?>
                 <div class="col-lg-2">
                     <?php
-                    echo $form->textField($model,"annual_money",
-                        array('readonly'=>($model->scenario=='view'),'prepend'=>'<span class="fa fa-money"></span>'));
+                    echo $form->numberField($model,"annual_money",
+                        array('readonly'=>($model->scenario=='view'),'min'=>0,'prepend'=>'<span class="fa fa-money"></span>'));
                     ?>
                 </div>
                 <?php echo $form->labelEx($model,'rate_num',array('class'=>"col-lg-2 control-label")); ?>
                 <div class="col-lg-2">
                     <?php
-                    echo $form->textField($model,"rate_num",
-                        array('readonly'=>($model->scenario=='view'),'append'=>'%'));
+                    echo $form->numberField($model,"rate_num",
+                        array('readonly'=>($model->scenario=='view'),'min'=>0,'append'=>'%'));
                     ?>
                 </div>
             </div>

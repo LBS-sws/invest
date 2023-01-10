@@ -288,18 +288,24 @@ class TreatyServiceForm extends CFormModel
 			$command->bindParam(':agent_user',$this->agent_user,PDO::PARAM_STR);
 		if (strpos($sql,':agent_phone')!==false)
 			$command->bindParam(':agent_phone',$this->agent_phone,PDO::PARAM_STR);
-		if (strpos($sql,':annual_money')!==false)
-			$command->bindParam(':annual_money',$this->annual_money,PDO::PARAM_STR);
-		if (strpos($sql,':rate_num')!==false)
-			$command->bindParam(':rate_num',$this->rate_num,PDO::PARAM_STR);
+		if (strpos($sql,':annual_money')!==false){
+            $this->annual_money = $this->annual_money===""?null:$this->annual_money;
+            $command->bindParam(':annual_money',$this->annual_money,PDO::PARAM_LOB);
+        }
+		if (strpos($sql,':rate_num')!==false){
+            $this->rate_num = $this->rate_num===""?null:$this->rate_num;
+            $command->bindParam(':rate_num',$this->rate_num,PDO::PARAM_LOB);
+        }
+		if (strpos($sql,':rate_government')!==false){
+            $this->rate_government = $this->rate_government===""?null:$this->rate_government;
+            $command->bindParam(':rate_government',$this->rate_government,PDO::PARAM_LOB);
+        }
 		if (strpos($sql,':account_type')!==false)
 			$command->bindParam(':account_type',$this->account_type,PDO::PARAM_INT);
 		if (strpos($sql,':technician_type')!==false)
 			$command->bindParam(':technician_type',$this->technician_type,PDO::PARAM_INT);
 		if (strpos($sql,':sales_source')!==false)
 			$command->bindParam(':sales_source',$this->sales_source,PDO::PARAM_STR);
-		if (strpos($sql,':rate_government')!==false)
-			$command->bindParam(':rate_government',$this->rate_government,PDO::PARAM_STR);
 		if (strpos($sql,':remark')!==false)
 			$command->bindParam(':remark',$this->remark,PDO::PARAM_STR);
         //id,treaty_code,treaty_num,city,city_allow,apply_date,apply_lcu,start_date,end_date,
