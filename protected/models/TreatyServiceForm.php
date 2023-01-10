@@ -160,7 +160,9 @@ class TreatyServiceForm extends CFormModel
         $colspan = 5;
         if(!$ready){
             $colspan++;
-            $html.="<th width='1%'>&nbsp;</th>";
+            $html.="<th width='1%' data-toggle='modal' data-target='#fileuploadtreaty'>";
+            $html.="<span class='fa fa-paperclip'></span>";
+            $html.="</th>";
         }
         $html.="</tr></thead><tbody>";
         if($rows){
@@ -183,7 +185,18 @@ class TreatyServiceForm extends CFormModel
         }else{
             $html.="<tr><td colspan='{$colspan}'>无记录</td></tr>";
         }
-        $html.="</tbody></table>";
+        $html.="</tbody>";
+        $html.="<tfoot><tr><td colspan='{$colspan}' class='text-right'>";
+
+        if(!$ready){
+            $html.=TbHtml::link("<span class='fa fa-plus'></span>".Yii::t("treaty","Add History"),Yii::app()->createUrl('treatyInfo/new',array("treaty_id"=>$treaty_id)),array("class"=>"btn btn-default"));
+        }else{
+            $html.=TbHtml::label('<span class="fa fa-paperclip"></span> ','', array(
+                    'data-toggle'=>'modal','data-target'=>'#fileuploadtreaty',)
+            );
+        }
+        $html.="</td></tr></tfoot>";
+        $html.="</table>";
         return $html;
     }
 

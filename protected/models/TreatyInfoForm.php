@@ -52,9 +52,17 @@ class TreatyInfoForm extends CFormModel
             array('id,info_state,treaty_id,history_code,history_date,history_matter,remark','safe'),
 			array('treaty_id,info_state,history_date','required'),
             array('id','validateID'),
+            array('remark','validateRemark'),
             array('files, removeFileId, docMasterId','safe'),
 		);
 	}
+
+    public function validateRemark($attribute, $params) {
+        if($this->info_state==3&&empty($this->remark)){
+            $this->addError($attribute, "标的停用时必须填写备注");
+            return false;
+        }
+    }
 
     public function validateID($attribute, $params) {
 	    if($this->getScenario()!="new"){
