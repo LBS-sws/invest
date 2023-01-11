@@ -27,6 +27,10 @@ class TreatyInfoController extends Controller
 				'actions'=>array('new','edit','delete','save','fileRemove','fileupload','fileDownload'),
 				'expression'=>array('TreatyInfoController','allowReadWrite'),
 			),
+			array('allow',
+				'actions'=>array('AjaxFileTable'),
+				'expression'=>array('TreatyInfoController','allowAjax'),
+			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
@@ -90,11 +94,21 @@ class TreatyInfoController extends Controller
 		}
 	}
 
+    public function actionAjaxFileTable($id=0) {
+        if(Yii::app()->request->isAjaxRequest) {//是否ajax请求
+            $model = new TreatyInfoForm();
+            $docman = new DocMan($model->docType,$id,get_class($model));
+            echo CJSON::encode(array("status"=>1,"html"=>$docman->ajaxGenTableFileList()));
+        }else{
+            $this->redirect(Yii::app()->createUrl('site/index'));
+        }
+    }
+
     public function actionFileupload($doctype) {
         $model = new TreatyInfoForm();
         if (isset($_POST['TreatyInfoForm'])) {
             $model->attributes = $_POST['TreatyInfoForm'];
-            $id = $model->treaty_id;
+            $id = ($_POST['TreatyInfoForm']['scenario']=='new') ? 0 : $model->id;
             $docman = new DocMan($model->docType,$id,get_class($model));
             $docman->masterId = $model->docMasterId[strtolower($doctype)];
             if (isset($_FILES[$docman->inputName])) $docman->files = $_FILES[$docman->inputName];
@@ -109,7 +123,7 @@ class TreatyInfoController extends Controller
         $model = new TreatyInfoForm();
         if (isset($_POST['TreatyInfoForm'])) {
             $model->attributes = $_POST['TreatyInfoForm'];
-            $docman = new DocMan($model->docType,$model->treaty_id,'TreatyInfoForm');
+            $docman = new DocMan($model->docType,$model->id,'TreatyInfoForm');
             $docman->masterId = $model->docMasterId[strtolower($doctype)];
             $docman->fileRemove($model->removeFileId[strtolower($doctype)]);
             echo $docman->genTableFileList(false);
@@ -119,8 +133,9 @@ class TreatyInfoController extends Controller
     }
 
     public function actionFileDownload($mastId, $docId, $fileId, $doctype) {
-        $sql = "select city_allow,apply_lcu from inv_treaty where id = $docId";
-        $row = Yii::app()->db->createCommand($sql)->queryRow();
+        $row = Yii::app()->db->createCommand()->select("b.city_allow,b.apply_lcu")->from("inv_treaty_info a")
+            ->leftJoin("inv_treaty b","a.treaty_id=b.id")
+            ->where("a.id=:id",array(":id"=>$docId))->queryRow();
         if ($row!==false) {
             $citylist = Yii::app()->user->city_allow();
             $uid = Yii::app()->user->id;
@@ -142,5 +157,9 @@ class TreatyInfoController extends Controller
 	
 	public static function allowReadOnly() {
 		return Yii::app()->user->validFunction('TH01');
+	}
+
+	public static function allowAjax() {
+        return Yii::app()->user->validFunction('TH01');
 	}
 }

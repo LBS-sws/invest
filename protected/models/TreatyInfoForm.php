@@ -14,15 +14,15 @@ class TreatyInfoForm extends CFormModel
 	public $lcu;
 
     public $no_of_attm = array(
-        'treaty'=>0
+        'tyinfo'=>0
     );
-    public $docType = 'TREATY';
+    public $docType = 'TYINFO';
     public $docMasterId = array(
-        'treaty'=>0
+        'tyinfo'=>0
     );
     public $files;
     public $removeFileId = array(
-        'treaty'=>0
+        'tyinfo'=>0
     );
 
 	/**
@@ -84,17 +84,16 @@ class TreatyInfoForm extends CFormModel
 
 	public function retrieveNewData($treaty_id)
 	{
-        $suffix = Yii::app()->params['envSuffix'];
         $city_allow = Yii::app()->user->city_allow();
         $uid = Yii::app()->user->id;
-        $sql = "select a.id,docman$suffix.countdoc('TREATY',a.id) as treatydoc 
+        $sql = "select a.id 
 				from inv_treaty a
 				where (a.city_allow in ({$city_allow}) or a.apply_lcu='{$uid}') and a.id='$treaty_id'
 			";
         $row = Yii::app()->db->createCommand($sql)->queryRow();
         if ($row!==false) {
             $this->treaty_id=$row["id"];
-            $this->no_of_attm["treaty"] = $row['treatydoc'];
+            //$this->no_of_attm["tyinfo"] = $row['tyinfodoc'];
             return true;
 		}else{
 		    return false;
@@ -130,7 +129,7 @@ class TreatyInfoForm extends CFormModel
         $city_allow = Yii::app()->user->city_allow();
         $uid = Yii::app()->user->id;
 
-        $row = Yii::app()->db->createCommand()->select("a.*,docman$suffix.countdoc('TREATY',b.id) as treatydoc")
+        $row = Yii::app()->db->createCommand()->select("a.*,docman$suffix.countdoc('TYINFO',a.id) as tyinfodoc")
             ->from("inv_treaty_info a")
             ->leftJoin("inv_treaty b","a.treaty_id=b.id")
             ->where("a.id=:id and (b.city_allow in ({$city_allow}) or b.apply_lcu='{$uid}')",array(":id"=>$index))->queryRow();
@@ -143,7 +142,7 @@ class TreatyInfoForm extends CFormModel
             $this->history_matter = $row['history_matter'];
             $this->remark = $row['remark'];
             $this->info_state = $row['info_state'];
-            $this->no_of_attm["treaty"] = $row['treatydoc'];
+            $this->no_of_attm["tyinfo"] = $row['tyinfodoc'];
             return true;
 		}else{
 		    return false;
@@ -158,6 +157,7 @@ class TreatyInfoForm extends CFormModel
 		try {
 			$this->saveDataForSql($connection);
 			$this->saveService();
+            $this->updateDocman($connection,'TYINFO');
 			$transaction->commit();
 		}
 		catch(Exception $e) {
@@ -166,6 +166,18 @@ class TreatyInfoForm extends CFormModel
 			throw new CHttpException(404,'Cannot update.');
 		}
 	}
+
+    protected function updateDocman(&$connection, $doctype) {
+        if ($this->scenario=='new') {
+            $docidx = strtolower($doctype);
+            if ($this->docMasterId[$docidx] > 0) {
+                $docman = new DocMan($doctype,$this->id,get_class($this));
+                $docman->masterId = $this->docMasterId[$docidx];
+                $docman->updateDocId($connection, $this->docMasterId[$docidx]);
+            }
+            $this->scenario = "edit";
+        }
+    }
 
 	protected function saveService(){
         $updateArr = array(

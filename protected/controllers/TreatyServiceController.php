@@ -147,9 +147,8 @@ class TreatyServiceController extends Controller
     public function actionAjaxFileTable($id=0) {
         if(Yii::app()->request->isAjaxRequest) {//是否ajax请求
             $model = new TreatyServiceForm();
-            $docman = new DocMan($model->docType,$id,get_class($model));
-            $docman->masterId = $model->docMasterId[strtolower($docman->docType)];
-            echo CJSON::encode(array("status"=>1,"html"=>$docman->genTableFileList(true,false)));
+            $html = $model->getAjaxFileTable($id);
+            echo CJSON::encode(array("status"=>1,"html"=>$html));
         }else{
             $this->redirect(Yii::app()->createUrl('site/index'));
         }

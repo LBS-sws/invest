@@ -148,37 +148,45 @@ class TreatyServiceForm extends CFormModel
 	}
 
 	public static function getHistoryTable($treaty_id,$ready=true){
-        $rows = Yii::app()->db->createCommand()->select("*")->from("inv_treaty_info")
+        $suffix = Yii::app()->params['envSuffix'];
+        $rows = Yii::app()->db->createCommand()->select("*,docman$suffix.countdoc('TYINFO',id) as tyinfodoc")
+            ->from("inv_treaty_info")
             ->where("treaty_id=:id",array(":id"=>$treaty_id))->order("history_date asc")->queryAll();
         $html = "<table class='table table-hover table-striped table-bordered'>";
         $html.="<thead><tr>";
+        $colspan = 6;
+        if(!$ready){
+            $colspan++;
+            $html.="<th width='1%'>&nbsp;</th>";
+        }
         $html.="<th width='10%'>".Yii::t("treaty","history code")."</th>";
         $html.="<th width='10%'>".Yii::t("treaty","history date")."</th>";
         $html.="<th width='10%'>".Yii::t("treaty","info state")."</th>";
         $html.="<th width='35%'>".Yii::t("treaty","history matter")."</th>";
         $html.="<th width='35'>".Yii::t("treaty","remark")."</th>";
-        $colspan = 5;
-        if(!$ready){
-            $colspan++;
-            $html.="<th width='1%' data-toggle='modal' data-target='#fileuploadtreaty'>";
-            $html.="<span class='fa fa-paperclip'></span>";
-            $html.="</th>";
-        }
+        $html.="<th width='1%'>&nbsp;</th>";
         $html.="</tr></thead><tbody>";
         if($rows){
             foreach ($rows as $row){
-                $html.="<tr>";
-                $html.="<td>".$row["history_code"]."</td>";
-                $html.="<td>".CGeneral::toDate($row["history_date"])."</td>";
-                $html.="<td>".TreatyInfoForm::getInfoStateList($row["info_state"],true)."</td>";
-                $html.="<td>".$row["history_matter"]."</td>";
-                $html.="<td>".$row["remark"]."</td>";
                 if(!$ready){
                     $label = "<span class='glyphicon glyphicon-pencil'></span>";
                     $link = Yii::app()->createUrl('treatyInfo/edit',array('index'=>$row["id"],'treaty_id'=>$treaty_id));
+                    $html.="<tr class='clickable-row' data-href='{$link}'>";
                     $html.="<td>";
                     $html.=TbHtml::link($label,$link);
                     $html.="</td>";
+                }else{
+                    $html.="<tr>";
+                }
+                $html.="<td class='history_code'>".$row["history_code"]."</td>";
+                $html.="<td class='history_date'>".CGeneral::toDate($row["history_date"])."</td>";
+                $html.="<td>".TreatyInfoForm::getInfoStateList($row["info_state"],true)."</td>";
+                $html.="<td>".$row["history_matter"]."</td>";
+                $html.="<td>".$row["remark"]."</td>";
+                if(!empty($row["tyinfodoc"])){
+                    $html.="<td class='td_end' data-id='{$row["id"]}'><span class='fa fa-paperclip'></span></td>";
+                }else{
+                    $html.="<td>&nbsp;</td>";
                 }
                 $html.="</tr>";
             }
@@ -217,6 +225,30 @@ class TreatyServiceForm extends CFormModel
         ), "id=:id", array(':id'=>$this->id));
         $this->retrieveData($this->id,false);//刷新邮件收件人
 	}
+
+	public function getAjaxFileTable($id){
+	    $this->id = $id;
+        $docman = new DocMan($this->docType,$id,get_class($this));
+        $docman->masterId = $this->docMasterId[strtolower($docman->docType)];
+        $html = $docman->ajaxGenTableFileList();//标的主附件
+        $msg = Yii::t('dialog','No File Record');
+        $rtn = "<tr><td>&nbsp;</td><td colspan=2>$msg</td></tr>";
+        $html = $html==$rtn?"":$html;
+        $rows = Yii::app()->db->createCommand()->select("id")->from("inv_treaty_info")
+            ->where("treaty_id=:id",array(":id"=>$id))->order("history_date asc")->queryAll();
+        if($rows){
+            $infoModel = new TreatyInfoForm("new");
+            foreach ($rows as $row){ //获取记录的附件
+                $docman = new DocMan($infoModel->docType,$row["id"],get_class($infoModel));
+                $docman->masterId = $infoModel->docMasterId[strtolower($docman->docType)];
+                $infoHtml= $docman->ajaxGenTableFileList();
+                $infoHtml = $infoHtml==$rtn?"":$infoHtml;
+                $html.= $infoHtml;
+            }
+        }
+        $html=empty($html)?$rtn:$html;
+        return $html;
+    }
 
 
 	public function saveData()

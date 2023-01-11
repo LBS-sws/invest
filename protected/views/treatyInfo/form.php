@@ -42,10 +42,10 @@ $this->pageTitle=Yii::app()->name . ' - TreatyInfo Form';
 	</div>
             <div class="btn-group pull-right" role="group">
                 <?php
-                $counter = ($model->no_of_attm['treaty'] > 0) ? ' <span id="doctreaty" class="label label-info">'.$model->no_of_attm['treaty'].'</span>' : ' <span id="doctreaty"></span>';
+                $counter = ($model->no_of_attm['tyinfo'] > 0) ? ' <span id="doctyinfo" class="label label-info">'.$model->no_of_attm['tyinfo'].'</span>' : ' <span id="doctyinfo"></span>';
 
                 echo TbHtml::button('<span class="fa  fa-file-text-o"></span> '.Yii::t('misc','Attachment').$counter, array(
-                        'name'=>'btnFile','id'=>'btnFile','data-toggle'=>'modal','data-target'=>'#fileuploadtreaty',)
+                        'name'=>'btnFile','id'=>'btnFile','data-toggle'=>'modal','data-target'=>'#fileuploadtyinfo',)
                 );
                 ?>
             </div>
@@ -108,21 +108,18 @@ $this->pageTitle=Yii::app()->name . ' - TreatyInfo Form';
 </section>
 
 <?php
-$id = $model->id;
-$model->id = $model->treaty_id;
 $this->renderPartial('//site/fileupload',array(
     'model'=>$model,
     'form'=>$form,
-    'doctype'=>'TREATY',
+    'doctype'=>'TYINFO',
     'header'=>Yii::t('misc','Attachment'),
     'ronly'=>($model->scenario=='view')
 ));
-$model->id = $id;
 ?>
 <?php $this->renderPartial('//site/removedialog'); ?>
 
 <?php
-Script::genFileUpload($model,$form->id,'TREATY');
+Script::genFileUpload($model,$form->id,'TYINFO');
 //.trigger('change')
 $js ="
 ";

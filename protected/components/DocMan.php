@@ -421,6 +421,35 @@ class DocMan {
 		return $rtn;
 	}
 
+	public function ajaxGenTableFileList() {
+		$rtn = "";
+		$reccnt = 0;
+		$filelist = $this->retrieve();
+		if (empty($filelist)) {
+			$msg = Yii::t('dialog','No File Record');
+			$rtn = "<tr><td>&nbsp;</td><td colspan=2>$msg</td></tr>";
+		} else {
+			$title1 = Yii::t('dialog','Download');
+			$title2 = Yii::t('dialog','Remove');
+			$doctype = strtolower($this->docType);
+			foreach ($filelist as $filerec) {
+				$mid = $filerec['id'];
+				$did = $this->docId;
+				$id = $filerec['file_id'];
+				$x = $this->masterId;
+				$y = $this->formId;
+				$vbutton = ($this->docId==0) ? "" : "<a href=\"#\" onclick=\"downloadFile$doctype($mid, $did, $id);return false;\" title=\"$title1\"><span class=\"fa fa-download\"></span></a>";
+				$dbutton  = "";
+				$fname = $filerec['display_name'];
+				$ldate = $filerec['lcd'];
+				$rtn .= "<tr><td>$vbutton&nbsp;&nbsp;$dbutton</td><td>$fname</td><td>$ldate</td></tr>";
+				$reccnt++;
+			}
+		}
+
+		return $rtn;
+	}
+
 	public function genFileListView() {
 		$rtn = "";
 		$filelist = $this->retrieve();

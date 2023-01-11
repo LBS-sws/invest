@@ -4,6 +4,10 @@
         href = '<?php echo Yii::app()->createUrl('treatyService/filedownload');?>?mastId='+mid+'&docId='+did+'&fileId='+fid+'&doctype=TREATY';
         window.open(href);
     }
+    function downloadFiletyinfo(mid, did, fid) {
+        href = '<?php echo Yii::app()->createUrl('treatyInfo/filedownload');?>?mastId='+mid+'&docId='+did+'&fileId='+fid+'&doctype=TYINFO';
+        window.open(href);
+    }
 </script>
 <?php
 	$doc = new DocMan($doctype,0,'TreatyServiceForm');

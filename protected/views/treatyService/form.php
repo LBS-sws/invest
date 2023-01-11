@@ -133,7 +133,7 @@ $this->pageTitle=Yii::app()->name . ' - TreatyService Form';
                 <div class="col-lg-2">
                     <?php
                     echo $form->numberField($model,"annual_money",
-                        array('readonly'=>($model->scenario=='view'),'min'=>0,'prepend'=>'<span class="fa fa-money"></span>'));
+                        array('readonly'=>($model->scenario=='view'),'min'=>0));
                     ?>
                 </div>
                 <?php echo $form->labelEx($model,'rate_num',array('class'=>"col-lg-2 control-label")); ?>
@@ -249,11 +249,40 @@ $this->pageTitle=Yii::app()->name . ' - TreatyService Form';
 //$model->getInputBool()
 ?>
 
+<?php $this->renderPartial('attr',array(
+    'model'=>$model,
+    'form'=>$form,
+    'doctype'=>'TYINFO',
+    'header'=>Yii::t('misc','Attachment'),
+    'ronly'=>(false)
+));
+?>
 <?php $this->renderPartial('//site/removedialog'); ?>
 
 <?php
 Script::genFileUpload($model,$form->id,'TREATY');
 $js="
+$('.td_end').click(function(e){
+    if($(this).find('.fa').length>0){
+        var id=$(this).data('id');
+        var history_code=$(this).prevAll('.history_code').eq(0).text();
+        var history_date=$(this).prevAll('.history_date').eq(0).text();
+        $('#attrModel').find('.modal-title>small').remove();
+        $('#attrModel').find('.modal-title').append('<small>（'+history_code+' _ '+history_date+'）</small>');
+        
+        $.ajax({
+            type: 'get',
+            url: '".Yii::app()->createUrl('treatyInfo/AjaxFileTable')."',
+            data: {id:id},
+            dataType: 'json',
+            success: function(data){
+                $('#tblFiletyinfo>tbody').html(data.html);
+                $('#attrModel').modal('show');
+            }
+        });
+    }
+    e.stopPropagation();
+});
 ";
 Yii::app()->clientScript->registerScript('calcFunction',$js,CClientScript::POS_READY);
 $js = Script::genDeleteData(Yii::app()->createUrl('treatyService/delete'));
@@ -267,6 +296,8 @@ if ($model->scenario!='view') {
 }
 $js = Script::genReadonlyField();
 Yii::app()->clientScript->registerScript('readonlyClass',$js,CClientScript::POS_READY);
+$js = Script::genTableRowClick();
+Yii::app()->clientScript->registerScript('rowClick',$js,CClientScript::POS_READY);
 ?>
 
 <?php $this->endWidget(); ?>
