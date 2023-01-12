@@ -60,7 +60,7 @@ class TreatyServiceForm extends CFormModel
             'apply_date'=>Yii::t('treaty','apply date'),
             'apply_lcu'=>Yii::t('treaty','apply username'),
             'start_date'=>Yii::t('treaty','start date'),
-            'end_date'=>Yii::t('treaty','end date'),
+            'end_date'=>Yii::t('treaty','treaty end date'),
             'state_type'=>Yii::t('treaty','treaty state'),
 
             'company_name'=>Yii::t('treaty','company name'),

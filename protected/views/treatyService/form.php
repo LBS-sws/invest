@@ -179,24 +179,24 @@ $this->pageTitle=Yii::app()->name . ' - TreatyService Form';
                 </div>
             </div>
             <div class="form-group">
-                <?php echo $form->labelEx($model,'apply_date',array('class'=>"col-lg-2 control-label")); ?>
-                <div class="col-lg-2">
-                    <?php echo $form->textField($model, 'apply_date',
-                        array('readonly'=>($model->scenario=='view'),'prepend'=>'<span class="fa fa-calendar"></span>')
-                    ); ?>
-                </div>
                 <?php echo $form->labelEx($model,'apply_lcu',array('class'=>"col-lg-2 control-label")); ?>
                 <div class="col-lg-2">
                     <?php echo $form->textField($model, 'apply_lcu',
                         array('readonly'=>(true))
                     ); ?>
                 </div>
+                <?php echo $form->labelEx($model,'treaty_num',array('class'=>"col-lg-2 control-label")); ?>
+                <div class="col-lg-2">
+                    <?php echo $form->textField($model, 'treaty_num',
+                        array('readonly'=>(true))
+                    ); ?>
+                </div>
             </div>
             <div class="form-group">
-                <?php echo $form->labelEx($model,'start_date',array('class'=>"col-lg-2 control-label")); ?>
+                <?php echo $form->labelEx($model,'apply_date',array('class'=>"col-lg-2 control-label")); ?>
                 <div class="col-lg-2">
-                    <?php echo $form->textField($model, 'start_date',
-                        array('readonly'=>(true),'prepend'=>'<span class="fa fa-calendar"></span>')
+                    <?php echo $form->textField($model, 'apply_date',
+                        array('readonly'=>($model->scenario=='view'),'prepend'=>'<span class="fa fa-calendar"></span>')
                     ); ?>
                 </div>
                 <?php echo $form->labelEx($model,'end_date',array('class'=>"col-lg-2 control-label")); ?>
@@ -213,12 +213,6 @@ $this->pageTitle=Yii::app()->name . ' - TreatyService Form';
                     echo TbHtml::textField("state_type",TreatyServiceList::getStateStr($model->state_type),
                         array('readonly'=>(true)));
                     ?>
-                </div>
-                <?php echo $form->labelEx($model,'treaty_num',array('class'=>"col-lg-2 control-label")); ?>
-                <div class="col-lg-2">
-                    <?php echo $form->textField($model, 'treaty_num',
-                        array('readonly'=>(true))
-                    ); ?>
                 </div>
             </div>
 

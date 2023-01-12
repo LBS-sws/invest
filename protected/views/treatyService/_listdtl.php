@@ -4,7 +4,7 @@
 	<td class="company_name"><?php echo $this->record['company_name']; ?></td>
     <td><?php echo $this->record['city_allow']; ?></td>
     <td><?php echo $this->record['treaty_num']; ?></td>
-    <td><?php echo $this->record['start_date']; ?></td>
+    <td><?php echo $this->record['apply_date']; ?></td>
     <td><?php echo $this->record['end_date']; ?></td>
     <td class="state_type"><?php echo $this->record['state_type']; ?></td>
     <td class="td_end" data-id="<?php echo $this->record['id']; ?>">

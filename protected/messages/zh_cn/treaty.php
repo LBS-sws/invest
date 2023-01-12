@@ -13,7 +13,8 @@ return array(
 	'treaty unused'=>'未跟进',
 	'treaty service'=>'标的跟进中',
     'treaty end'=>'标的已收购',
-	'treaty stop'=>'标的已停用',
+	//'treaty stop'=>'标的已停用',
+	'treaty stop'=>'标的结束跟进',
 
 	'treaty history'=>'标的跟进记录',
 	'yes'=>'是',
@@ -22,6 +23,7 @@ return array(
 	'apply date'=>'标的开始时间',
 	'apply username'=>'记录账号',
 	'start date'=>'记录开始时间',
+	'treaty end date'=>'标的结束时间',
 	'end date'=>'记录结束时间',
     'company name'=>'企业名称',
     'company date'=>'企业成立日期',

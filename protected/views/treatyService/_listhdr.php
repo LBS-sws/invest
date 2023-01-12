@@ -21,7 +21,7 @@
 		?>
 	</th>
 	<th>
-		<?php echo TbHtml::link($this->getLabelName('start_date').$this->drawOrderArrow('a.start_date'),'#',$this->createOrderLink('treatyService-list','a.start_date'))
+		<?php echo TbHtml::link($this->getLabelName('apply_date').$this->drawOrderArrow('a.apply_date'),'#',$this->createOrderLink('treatyService-list','a.apply_date'))
 			;
 		?>
 	</th>

@@ -15,8 +15,9 @@ class TreatyServiceList extends CListPageModel
             'city_allow'=>Yii::t('treaty','city allow'),
 
             'treaty_num'=>Yii::t('treaty','treaty num'),
+			'apply_date'=>Yii::t('treaty','apply date'),
 			'start_date'=>Yii::t('treaty','start date'),
-			'end_date'=>Yii::t('treaty','end date'),
+			'end_date'=>Yii::t('treaty','treaty end date'),
 			'state_type'=>Yii::t('treaty','treaty state'),
             'apply_lcu'=>Yii::t('treaty','apply username'),
 		);
@@ -27,7 +28,7 @@ class TreatyServiceList extends CListPageModel
 		$suffix = Yii::app()->params['envSuffix'];
         $city_allow = Yii::app()->user->city_allow();
         $uid = Yii::app()->user->id;
-		$sql1 = "select a.*,b.name as city_name,docman$suffix.countdoc('TREATY',a.id) as treatydoc 
+		$sql1 = "select a.*,b.name as city_name 
 				from inv_treaty a
 				LEFT JOIN security{$suffix}.sec_city b on a.city_allow=b.code
 				where (a.city_allow in ({$city_allow}) or a.apply_lcu='{$uid}')
@@ -84,8 +85,9 @@ class TreatyServiceList extends CListPageModel
                     'company_name'=>$record['company_name'],
                     'apply_lcu'=>$record['apply_lcu'],
                     'city_allow'=>$record['city_name'],
-                    'treaty'=>$record['treatydoc'],
+                    'treaty'=>self::getTreatyDoc($record['id']),
                     'treaty_num'=>empty($record['treaty_num'])?"":$record['treaty_num'],
+                    'apply_date'=>empty($record['apply_date'])?"":CGeneral::toDate($record['apply_date']),
                     'start_date'=>empty($record['start_date'])?"":CGeneral::toDate($record['start_date']),
                     'end_date'=>empty($record['end_date'])?"":CGeneral::toDate($record['end_date']),
                     'state_type'=>$arr["state_type"],
@@ -97,6 +99,23 @@ class TreatyServiceList extends CListPageModel
 		$session['treatyService_c01'] = $this->getCriteria();
 		return true;
 	}
+
+	public static function getTreatyDoc($treaty_id){
+        $suffix = Yii::app()->params['envSuffix'];
+        $rows = Yii::app()->db->createCommand()->select("id")->from("inv_treaty_info")
+            ->where("treaty_id=:id",array(":id"=>$treaty_id))->queryAll();
+        $whereSql = "(a.doc_type_code='TREATY' AND a.doc_id=$treaty_id)";
+        if($rows){
+            foreach ($rows as $row){
+                $whereSql.= " or (a.doc_type_code='TYINFO' AND a.doc_id={$row["id"]})";
+            }
+        }
+        $count = Yii::app()->db->createCommand()->select("count(b.id)")->from("docman{$suffix}.dm_file b")
+            ->leftJoin("docman{$suffix}.dm_master a","a.id = b.mast_id")
+            ->where("b.remove<>'Y' and ($whereSql)",array(":id"=>$treaty_id))->queryScalar();
+        return $count;
+
+    }
 
 	public static function getStyleArr($state_type){
         $arr = array(
