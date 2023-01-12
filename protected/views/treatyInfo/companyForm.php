@@ -47,7 +47,7 @@ $row = TreatyInfoForm::getTreatyRowForId($model->treaty_id);
     <div class="col-lg-2">
         <?php
         echo Tbhtml::textField("annual_money",$row["annual_money"],
-            array('readonly'=>(true)));
+            array('readonly'=>(true),'append'=>Yii::t("treaty","W")));
         ?>
     </div>
     <?php echo Tbhtml::label(Yii::t("treaty","rate num"),'',array('class'=>"col-lg-2 control-label")); ?>

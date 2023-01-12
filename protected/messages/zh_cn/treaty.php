@@ -42,5 +42,6 @@ return array(
     'history code'=>'记录编号',
     'history matter'=>'记录事项',
     'info state'=>'跟进状态',
+    'W'=>'万',
 );
 ?>

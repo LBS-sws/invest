@@ -42,5 +42,6 @@ return array(
     'history code'=>'記錄編號',
     'history matter'=>'記錄事項',
     'info state'=>'跟進狀態',
+    'W'=>'萬',
 );
 ?>

@@ -133,7 +133,7 @@ $this->pageTitle=Yii::app()->name . ' - TreatyService Form';
                 <div class="col-lg-2">
                     <?php
                     echo $form->numberField($model,"annual_money",
-                        array('readonly'=>($model->scenario=='view'),'min'=>0));
+                        array('readonly'=>($model->scenario=='view'),'min'=>0,'append'=>Yii::t("treaty","W")));
                     ?>
                 </div>
                 <?php echo $form->labelEx($model,'rate_num',array('class'=>"col-lg-2 control-label")); ?>

@@ -128,7 +128,7 @@ class TreatyServiceForm extends CFormModel
 			$this->end_date = empty($row["end_date"])?"":CGeneral::toDate($row["end_date"]);
 			$this->state_type = $row['state_type'];
             $this->company_name = $row['company_name'];
-            $this->company_date = empty($row["company_date"])?"":CGeneral::toDate($row["end_date"]);
+            $this->company_date = empty($row["company_date"])?"":CGeneral::toDate($row["company_date"]);
 
             $this->agent_user = $row['agent_user'];
             $this->agent_phone = $row['agent_phone'];
