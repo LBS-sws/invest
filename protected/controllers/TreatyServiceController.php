@@ -86,6 +86,7 @@ class TreatyServiceController extends Controller
 	public function actionNew()
 	{
 		$model = new TreatyServiceForm('new');
+        $model->apply_date = date("Y/m/d");
 		$this->render('form',array('model'=>$model,));
 	}
 	

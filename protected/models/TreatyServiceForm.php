@@ -301,6 +301,7 @@ class TreatyServiceForm extends CFormModel
 					city = :city, 
 					company_name = :company_name, 
 					company_date = :company_date, 
+					apply_date = :apply_date, 
 					agent_user = :agent_user, 
 					agent_phone = :agent_phone, 
 					annual_money = :annual_money, 
@@ -323,7 +324,7 @@ class TreatyServiceForm extends CFormModel
 		if (strpos($sql,':id')!==false)
 			$command->bindParam(':id',$this->id,PDO::PARAM_INT);
 		if (strpos($sql,':apply_date')!==false){
-            $apply_date = date("Y-m-d");
+            $apply_date = empty($this->apply_date)?date("Y-m-d"):$this->apply_date;
             $command->bindParam(':apply_date',$apply_date,PDO::PARAM_STR);
         }
 		if (strpos($sql,':company_name')!==false)

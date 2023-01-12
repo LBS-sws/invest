@@ -182,7 +182,7 @@ $this->pageTitle=Yii::app()->name . ' - TreatyService Form';
                 <?php echo $form->labelEx($model,'apply_date',array('class'=>"col-lg-2 control-label")); ?>
                 <div class="col-lg-2">
                     <?php echo $form->textField($model, 'apply_date',
-                        array('readonly'=>(true),'prepend'=>'<span class="fa fa-calendar"></span>')
+                        array('readonly'=>($model->scenario=='view'),'prepend'=>'<span class="fa fa-calendar"></span>')
                     ); ?>
                 </div>
                 <?php echo $form->labelEx($model,'apply_lcu',array('class'=>"col-lg-2 control-label")); ?>
@@ -290,7 +290,8 @@ Yii::app()->clientScript->registerScript('deleteRecord',$js,CClientScript::POS_R
 
 if ($model->scenario!='view') {
     $js = Script::genDatePicker(array(
-        'TreatyServiceForm_company_date'
+        'TreatyServiceForm_company_date',
+        'TreatyServiceForm_apply_date',
     ));
     Yii::app()->clientScript->registerScript('datePick',$js,CClientScript::POS_READY);
 }
