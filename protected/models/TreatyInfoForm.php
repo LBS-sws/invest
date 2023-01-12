@@ -52,7 +52,7 @@ class TreatyInfoForm extends CFormModel
             array('id,info_state,treaty_id,history_code,history_date,history_matter,remark','safe'),
 			array('treaty_id,info_state,history_date','required'),
             array('id','validateID'),
-            array('remark','validateRemark'),
+            //array('remark','validateRemark'),
             array('files, removeFileId, docMasterId','safe'),
 		);
 	}
