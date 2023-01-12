@@ -31,15 +31,18 @@ class TreatyServiceForm extends CFormModel
 
 
     public $no_of_attm = array(
-        'treaty'=>0
+        'treaty'=>0,
+        'tyinfo'=>0
     );
     public $docType = 'TREATY';
     public $docMasterId = array(
-        'treaty'=>0
+        'treaty'=>0,
+        'tyinfo'=>0
     );
     public $files;
     public $removeFileId = array(
-        'treaty'=>0
+        'treaty'=>0,
+        'tyinfo'=>0
     );
 
 	/**
