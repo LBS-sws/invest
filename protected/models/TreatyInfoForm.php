@@ -9,6 +9,7 @@ class TreatyInfoForm extends CFormModel
     public $history_date;
     public $history_matter;
     public $info_state;
+    public $participant;
 
 	public $remark;
 	public $lcu;
@@ -37,6 +38,7 @@ class TreatyInfoForm extends CFormModel
             'history_date'=>Yii::t('treaty','history date'),
             'history_matter'=>Yii::t('treaty','history matter'),
             'info_state'=>Yii::t('treaty','info state'),
+            'participant'=>Yii::t('treaty','participant'),
 
             'remark'=>Yii::t('treaty','remark'),
             'lcu'=>Yii::t('treaty','treaty lcu'),
@@ -49,7 +51,7 @@ class TreatyInfoForm extends CFormModel
 	public function rules()
 	{
 		return array(
-            array('id,info_state,treaty_id,history_code,history_date,history_matter,remark','safe'),
+            array('id,participant,info_state,treaty_id,history_code,history_date,history_matter,remark','safe'),
 			array('treaty_id,info_state,history_date','required'),
             array('id','validateID'),
             //array('remark','validateRemark'),
@@ -119,6 +121,11 @@ class TreatyInfoForm extends CFormModel
 		        "technician_type"=>"",
 		        "sales_source"=>"",
 		        "rate_government"=>"",
+		        "rate_government"=>"",
+		        "rate_government"=>"",
+		        "rate_government"=>"",
+		        "rate_government"=>"",
+		        "rate_government"=>"",
             );
         }
 	}
@@ -142,6 +149,7 @@ class TreatyInfoForm extends CFormModel
             $this->history_matter = $row['history_matter'];
             $this->remark = $row['remark'];
             $this->info_state = $row['info_state'];
+            $this->participant = $row['participant'];
             $this->no_of_attm["tyinfo"] = $row['tyinfodoc'];
             return true;
 		}else{
@@ -194,10 +202,12 @@ class TreatyInfoForm extends CFormModel
             $updateArr["treaty_num"]=$row["treaty_num"];
 	        $maxRow = Yii::app()->db->createCommand()->select("history_date,info_state,remark")->from("inv_treaty_info")
                 ->where("treaty_id=:id",array(":id"=>$this->treaty_id))->order("history_date desc")->queryRow();
-	        if($maxRow&&$maxRow["info_state"]!=1){
+	        if($maxRow){
                 $updateArr["state_type"]=$maxRow["info_state"];
-                $updateArr["end_remark"]=$maxRow["remark"];
-                $updateArr["end_date"]=$maxRow["history_date"];
+	            if(in_array($maxRow["info_state"],array(2,3))){//标的已收购、标的结束跟进
+                    $updateArr["end_remark"]=$maxRow["remark"];
+                    $updateArr["end_date"]=$maxRow["history_date"];
+                }
             }
         }
 
@@ -214,12 +224,13 @@ class TreatyInfoForm extends CFormModel
 				break;
 			case 'new':
 				$sql = "insert into inv_treaty_info(
-						treaty_id, history_date, history_matter, info_state, remark, lcu) values (
-						:treaty_id, :history_date, :history_matter, :info_state, :remark, :lcu)";
+						treaty_id, history_date, participant, history_matter, info_state, remark, lcu) values (
+						:treaty_id, :history_date, :participant, :history_matter, :info_state, :remark, :lcu)";
 				break;
 			case 'edit':
 				$sql = "update inv_treaty_info set 
 					history_date = :history_date, 
+					participant = :participant, 
 					history_matter = :history_matter, 
 					info_state = :info_state, 
 					remark = :remark, 
@@ -240,6 +251,8 @@ class TreatyInfoForm extends CFormModel
 			$command->bindParam(':info_state',$this->info_state,PDO::PARAM_INT);
 		if (strpos($sql,':history_date')!==false)
 			$command->bindParam(':history_date',$this->history_date,PDO::PARAM_STR);
+		if (strpos($sql,':participant')!==false)
+			$command->bindParam(':participant',$this->participant,PDO::PARAM_STR);
 		if (strpos($sql,':history_matter')!==false)
 			$command->bindParam(':history_matter',$this->history_matter,PDO::PARAM_STR);
         if (strpos($sql,':remark')!==false)
@@ -264,9 +277,16 @@ class TreatyInfoForm extends CFormModel
 
 	public static function getInfoStateList($key="",$bool=false){
 	    $list = array(
-	        1=>Yii::t("treaty","treaty service"),
-	        2=>Yii::t("treaty","treaty end"),
-	        3=>Yii::t("treaty","treaty stop"),
+	        1=>Yii::t("treaty","treaty service"),//标的跟进中
+	        2=>Yii::t("treaty","treaty end"),//标的已收购
+	        3=>Yii::t("treaty","treaty stop"),//标的结束跟进
+	        4=>Yii::t("treaty","Complete telephone"),//完成电话联系客户
+	        5=>Yii::t("treaty","Online conference"),//线上会议
+	        6=>Yii::t("treaty","Offline meeting"),//线下会议
+	        7=>Yii::t("treaty","Field trip"),//实地考察
+	        8=>Yii::t("treaty","Due diligence"),//尽职审查
+	        9=>Yii::t("treaty","sign MOU"),//签订MOU
+	        10=>Yii::t("treaty","Close the deal"),//完成交易
         );
 	    if($bool){
 	        if(key_exists($key,$list)){

@@ -18,7 +18,7 @@ class TreatyServiceList extends CListPageModel
 			'apply_date'=>Yii::t('treaty','apply date'),
 			'start_date'=>Yii::t('treaty','start date'),
 			'end_date'=>Yii::t('treaty','treaty end date'),
-			'state_type'=>Yii::t('treaty','treaty state'),
+			'state_type'=>Yii::t('treaty','Current status'),
             'apply_lcu'=>Yii::t('treaty','apply username'),
 		);
 	}
@@ -136,8 +136,11 @@ class TreatyServiceList extends CListPageModel
                 "state_type"=>Yii::t("treaty","treaty stop")
             ),
         );
+        $exprList = TreatyInfoForm::getInfoStateList();
         if(key_exists($state_type,$arr)){
             return $arr[$state_type];
+        }elseif(key_exists($state_type,$exprList)){
+            return array("color"=>"text-primary","state_type"=>$exprList[$state_type]);
         }else{
             return array("color"=>"","state_type"=>"");
         }

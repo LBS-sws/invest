@@ -45,5 +45,21 @@ return array(
     'history matter'=>'记录事项',
     'info state'=>'跟进状态',
     'W'=>'万',
+
+    'Current status'=>'标的最新状态',
+    'lbs city'=>'是否为LBS空白城市',
+    'appeal text'=>'对方诉求',
+    'trait text'=>'客户类别/特点',
+    'holder text'=>'股东名称及股比',
+    'capital text'=>'注册资本',
+    'participant'=>'参与者',
+
+    'Complete telephone'=>'完成电话联系客户',
+    'Online conference'=>'线上会议',
+    'Offline meeting'=>'线下会议',
+    'Field trip'=>'实地考察',
+    'Due diligence'=>'尽职审查',
+    'sign MOU'=>'签订MOU',
+    'Close the deal'=>'完成交易',
 );
 ?>

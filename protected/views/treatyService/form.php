@@ -170,11 +170,54 @@ $this->pageTitle=Yii::app()->name . ' - TreatyService Form';
                 </div>
             </div>
             <div class="form-group">
+                <?php echo $form->labelEx($model,'capital_text',array('class'=>"col-lg-2 control-label")); ?>
+                <div class="col-lg-2">
+                    <?php
+                    echo $form->numberField($model,"capital_text",
+                        array('readonly'=>($model->scenario=='view'),'min'=>0,'append'=>Yii::t("treaty","W")));
+                    ?>
+                </div>
+                <?php echo $form->labelEx($model,'lbs_city',array('class'=>"col-lg-2 control-label")); ?>
+                <div class="col-lg-2">
+                    <?php
+                    echo $form->dropDownList($model,"lbs_city",TreatyServiceForm::getLBSCityOption(),
+                        array('readonly'=>($model->scenario=='view')));
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'appeal_text',array('class'=>"col-lg-2 control-label")); ?>
+                <div class="col-lg-7">
+                    <?php
+                    echo $form->textArea($model,"appeal_text",
+                        array('readonly'=>($model->scenario=='view'),'rows'=>3));
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'trait_text',array('class'=>"col-lg-2 control-label")); ?>
+                <div class="col-lg-7">
+                    <?php
+                    echo $form->textArea($model,"trait_text",
+                        array('readonly'=>($model->scenario=='view'),'rows'=>3));
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'holder_text',array('class'=>"col-lg-2 control-label")); ?>
+                <div class="col-lg-7">
+                    <?php
+                    echo $form->textArea($model,"holder_text",
+                        array('readonly'=>($model->scenario=='view'),'rows'=>3));
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
                 <?php echo $form->labelEx($model,'remark',array('class'=>"col-lg-2 control-label")); ?>
                 <div class="col-lg-7">
                     <?php
                     echo $form->textArea($model,"remark",
-                        array('readonly'=>($model->scenario=='view'),'rows'=>4));
+                        array('readonly'=>($model->scenario=='view'),'rows'=>3));
                     ?>
                 </div>
             </div>

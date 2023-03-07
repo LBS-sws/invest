@@ -87,6 +87,14 @@ $this->pageTitle=Yii::app()->name . ' - TreatyInfo Form';
                 </div>
             </div>
             <div class="form-group">
+                <?php echo $form->labelEx($model,'participant',array('class'=>"col-lg-2 control-label")); ?>
+                <div class="col-lg-7">
+                    <?php echo $form->textField($model, 'participant',
+                        array('readonly'=>($model->scenario=='view'))
+                    ); ?>
+                </div>
+            </div>
+            <div class="form-group">
                 <?php echo $form->labelEx($model,'history_matter',array('class'=>"col-lg-2 control-label")); ?>
                 <div class="col-lg-4">
                     <?php echo $form->textArea($model, 'history_matter',

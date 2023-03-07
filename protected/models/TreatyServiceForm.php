@@ -20,6 +20,12 @@ class TreatyServiceForm extends CFormModel
     public $remark;
     public $end_remark;
 
+    public $lbs_city=1;
+    public $appeal_text;
+    public $trait_text;
+    public $holder_text;
+    public $capital_text;
+
 	public $city;
 	public $city_allow;
 	public $apply_date;
@@ -61,7 +67,7 @@ class TreatyServiceForm extends CFormModel
             'apply_lcu'=>Yii::t('treaty','apply username'),
             'start_date'=>Yii::t('treaty','start date'),
             'end_date'=>Yii::t('treaty','treaty end date'),
-            'state_type'=>Yii::t('treaty','treaty state'),
+            'state_type'=>Yii::t('treaty','Current status'),
 
             'company_name'=>Yii::t('treaty','company name'),
             'company_date'=>Yii::t('treaty','company date'),
@@ -75,6 +81,12 @@ class TreatyServiceForm extends CFormModel
             'rate_government'=>Yii::t('treaty','rate government'),
             'remark'=>Yii::t('treaty','remark'),
             'end_remark'=>Yii::t('treaty','end remark'),
+
+            'lbs_city'=>Yii::t('treaty','lbs city'),
+            'appeal_text'=>Yii::t('treaty','appeal text'),
+            'trait_text'=>Yii::t('treaty','trait text'),
+            'holder_text'=>Yii::t('treaty','holder text'),
+            'capital_text'=>Yii::t('treaty','capital text'),
         );
 	}
 
@@ -86,6 +98,7 @@ class TreatyServiceForm extends CFormModel
 		return array(
             array('id,treaty_code,treaty_num,city,city_allow,apply_date,apply_lcu,start_date,end_date,state_type,
             company_name,company_date,agent_user,agent_phone,annual_money,rate_num,account_type,
+            lbs_city,appeal_text,trait_text,holder_text,capital_text,
             technician_type,sales_source,rate_government,remark,end_remark','safe'),
 			array('company_name,city_allow','required'),
             array('id','validateID','on'=>array("delete")),
@@ -143,6 +156,12 @@ class TreatyServiceForm extends CFormModel
             $this->sales_source = $row['sales_source'];
             $this->remark = $row['remark'];
             $this->end_remark = $row['end_remark'];
+            //lbs_city,appeal_text,trait_text,holder_text,capital_text,
+            $this->lbs_city = $row['lbs_city'];
+            $this->appeal_text = $row['appeal_text'];
+            $this->trait_text = $row['trait_text'];
+            $this->holder_text = $row['holder_text'];
+            $this->capital_text = empty($row['capital_text'])?"":floatval($row['capital_text']);
             $this->no_of_attm["treaty"] = $row['treatydoc'];
             return true;
 		}else{
@@ -157,16 +176,17 @@ class TreatyServiceForm extends CFormModel
             ->where("treaty_id=:id",array(":id"=>$treaty_id))->order("history_date asc")->queryAll();
         $html = "<table class='table table-hover table-striped table-bordered'>";
         $html.="<thead><tr>";
-        $colspan = 6;
+        $colspan = 7;
         if(!$ready){
             $colspan++;
             $html.="<th width='1%'>&nbsp;</th>";
         }
         $html.="<th width='10%'>".Yii::t("treaty","history code")."</th>";
         $html.="<th width='10%'>".Yii::t("treaty","history date")."</th>";
-        $html.="<th width='10%'>".Yii::t("treaty","info state")."</th>";
-        $html.="<th width='35%'>".Yii::t("treaty","history matter")."</th>";
-        $html.="<th width='35'>".Yii::t("treaty","remark")."</th>";
+        $html.="<th width='14%'>".Yii::t("treaty","info state")."</th>";
+        $html.="<th width='14%'>".Yii::t("treaty","participant")."</th>";
+        $html.="<th width='26%'>".Yii::t("treaty","history matter")."</th>";
+        $html.="<th width='26%'>".Yii::t("treaty","remark")."</th>";
         $html.="<th width='1%'>&nbsp;</th>";
         $html.="</tr></thead><tbody>";
         if($rows){
@@ -184,6 +204,7 @@ class TreatyServiceForm extends CFormModel
                 $html.="<td class='history_code'>".$row["history_code"]."</td>";
                 $html.="<td class='history_date'>".CGeneral::toDate($row["history_date"])."</td>";
                 $html.="<td>".TreatyInfoForm::getInfoStateList($row["info_state"],true)."</td>";
+                $html.="<td>".$row["participant"]."</td>";
                 $html.="<td>".$row["history_matter"]."</td>";
                 $html.="<td>".$row["remark"]."</td>";
                 if(!empty($row["tyinfodoc"])){
@@ -292,8 +313,8 @@ class TreatyServiceForm extends CFormModel
 				break;
 			case 'new':
 				$sql = "insert into inv_treaty(
-						city_allow, city, apply_date, apply_lcu, company_name, company_date, agent_user, agent_phone, annual_money, rate_num, account_type, technician_type, sales_source, rate_government, remark, lcu) values (
-						:city_allow, :city, :apply_date, :apply_lcu, :company_name, :company_date, :agent_user, :agent_phone, :annual_money, :rate_num, :account_type, :technician_type, :sales_source, :rate_government, :remark, :lcu)";
+						lbs_city,appeal_text,trait_text,holder_text,capital_text,city_allow, city, apply_date, apply_lcu, company_name, company_date, agent_user, agent_phone, annual_money, rate_num, account_type, technician_type, sales_source, rate_government, remark, lcu) values (
+						:lbs_city,:appeal_text,:trait_text,:holder_text,:capital_text,:city_allow, :city, :apply_date, :apply_lcu, :company_name, :company_date, :agent_user, :agent_phone, :annual_money, :rate_num, :account_type, :technician_type, :sales_source, :rate_government, :remark, :lcu)";
 				break;
 			case 'edit':
 				$sql = "update inv_treaty set 
@@ -312,6 +333,11 @@ class TreatyServiceForm extends CFormModel
 					sales_source = :sales_source, 
 					rate_government = :rate_government, 
 					remark = :remark, 
+					lbs_city = :lbs_city, 
+					appeal_text = :appeal_text, 
+					trait_text = :trait_text, 
+					holder_text = :holder_text, 
+					capital_text = :capital_text, 
 					luu = :luu
 					where id = :id";
 				break;
@@ -357,6 +383,17 @@ class TreatyServiceForm extends CFormModel
 			$command->bindParam(':sales_source',$this->sales_source,PDO::PARAM_STR);
 		if (strpos($sql,':remark')!==false)
 			$command->bindParam(':remark',$this->remark,PDO::PARAM_STR);
+        //lbs_city,appeal_text,trait_text,holder_text,capital_text,
+		if (strpos($sql,':lbs_city')!==false)
+			$command->bindParam(':lbs_city',$this->lbs_city,PDO::PARAM_INT);
+		if (strpos($sql,':appeal_text')!==false)
+			$command->bindParam(':appeal_text',$this->appeal_text,PDO::PARAM_STR);
+		if (strpos($sql,':trait_text')!==false)
+			$command->bindParam(':trait_text',$this->trait_text,PDO::PARAM_STR);
+		if (strpos($sql,':holder_text')!==false)
+			$command->bindParam(':holder_text',$this->holder_text,PDO::PARAM_STR);
+		if (strpos($sql,':capital_text')!==false)
+			$command->bindParam(':capital_text',$this->capital_text,PDO::PARAM_INT);
         //id,treaty_code,treaty_num,city,city_allow,apply_date,apply_lcu,start_date,end_date,
         //state_type,company_name,company_date,agent_user,annual_money,rate_num,account_type,
         //technician_type,sales_source,rate_government,remark,end_remark
@@ -398,6 +435,18 @@ class TreatyServiceForm extends CFormModel
 
 	public static function getTechnicianType($key=0,$bool=false){
 	    $list = array(0=>Yii::t("treaty","none"),1=>Yii::t("treaty","have"));
+	    if($bool){
+	        if(key_exists($key,$list)){
+	            return $list[$key];
+            }else{
+	            return $key;
+            }
+        }
+        return $list;
+    }
+
+	public static function getLBSCityOption($key=0,$bool=false){
+	    $list = array(0=>Yii::t("misc","No"),1=>Yii::t("misc","Yes"));
 	    if($bool){
 	        if(key_exists($key,$list)){
 	            return $list[$key];
