@@ -392,8 +392,10 @@ class TreatyServiceForm extends CFormModel
 			$command->bindParam(':trait_text',$this->trait_text,PDO::PARAM_STR);
 		if (strpos($sql,':holder_text')!==false)
 			$command->bindParam(':holder_text',$this->holder_text,PDO::PARAM_STR);
-		if (strpos($sql,':capital_text')!==false)
-			$command->bindParam(':capital_text',$this->capital_text,PDO::PARAM_INT);
+		if (strpos($sql,':capital_text')!==false){
+            $this->capital_text = empty($this->capital_text)?null:$this->capital_text;
+            $command->bindParam(':capital_text',$this->capital_text,PDO::PARAM_INT);
+        }
         //id,treaty_code,treaty_num,city,city_allow,apply_date,apply_lcu,start_date,end_date,
         //state_type,company_name,company_date,agent_user,annual_money,rate_num,account_type,
         //technician_type,sales_source,rate_government,remark,end_remark
