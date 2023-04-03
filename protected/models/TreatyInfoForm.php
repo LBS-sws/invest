@@ -276,6 +276,12 @@ class TreatyInfoForm extends CFormModel
 	}
 
 	public static function getInfoStateList($key="",$bool=false){
+	    $newList = array(
+	        ""=>"",
+	        11=>Yii::t("treaty","Project sourcing"),//项目寻源
+	        12=>Yii::t("treaty","Project screening"),//项目初筛
+	        13=>Yii::t("treaty","Intention negotiate"),//意向洽谈
+        );
 	    $list = array(
 	        1=>Yii::t("treaty","treaty service"),//标的跟进中
 	        2=>Yii::t("treaty","treaty end"),//标的已收购
@@ -287,14 +293,20 @@ class TreatyInfoForm extends CFormModel
 	        8=>Yii::t("treaty","Due diligence"),//尽职审查
 	        9=>Yii::t("treaty","sign MOU"),//签订MOU
 	        10=>Yii::t("treaty","Close the deal"),//完成交易
-        );
+        );//2023年4月份棄用，但舊數據仍然需要顯示
 	    if($bool){
-	        if(key_exists($key,$list)){
-	            return $list[$key];
+	        if(key_exists($key,$newList)){
+	            return $newList[$key];
+            }elseif(key_exists($key,$list)){
+                return $list[$key];
             }else{
-	            return $key;
+                return $key;
             }
+        }else{
+	        if(!empty($key)&&!key_exists($key,$newList)&&key_exists($key,$list)){
+	            $newList[$key] = $list[$key];
+            }
+            return $newList;
         }
-	    return $list;
     }
 }

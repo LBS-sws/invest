@@ -61,5 +61,8 @@ return array(
     'Due diligence'=>'尽职审查',
     'sign MOU'=>'签订MOU',
     'Close the deal'=>'完成交易',
+    'Project sourcing'=>'项目寻源',
+    'Project screening'=>'项目初筛',
+    'Intention negotiate'=>'意向洽谈',
 );
 ?>

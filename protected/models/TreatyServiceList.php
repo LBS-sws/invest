@@ -136,13 +136,13 @@ class TreatyServiceList extends CListPageModel
                 "state_type"=>Yii::t("treaty","treaty stop")
             ),
         );
-        $exprList = TreatyInfoForm::getInfoStateList();
         if(key_exists($state_type,$arr)){
             return $arr[$state_type];
-        }elseif(key_exists($state_type,$exprList)){
-            return array("color"=>"text-primary","state_type"=>$exprList[$state_type]);
-        }else{
+        }elseif(empty($state_type)){
             return array("color"=>"","state_type"=>"");
+        }else{
+            $stateStr = TreatyInfoForm::getInfoStateList($state_type,true);
+            return array("color"=>"text-primary","state_type"=>$stateStr);
         }
     }
 

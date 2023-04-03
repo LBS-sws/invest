@@ -73,7 +73,7 @@ $this->pageTitle=Yii::app()->name . ' - TreatyInfo Form';
             <div class="form-group">
                 <?php echo $form->labelEx($model,'info_state',array('class'=>"col-lg-2 control-label")); ?>
                 <div class="col-lg-2">
-                    <?php echo $form->dropDownList($model, 'info_state',TreatyInfoForm::getInfoStateList(),
+                    <?php echo $form->dropDownList($model, 'info_state',TreatyInfoForm::getInfoStateList($model->info_state),
                         array('readonly'=>($model->scenario=='view'))
                     ); ?>
                 </div>
