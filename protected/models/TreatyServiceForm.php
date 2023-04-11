@@ -116,6 +116,19 @@ class TreatyServiceForm extends CFormModel
         }
     }
 
+    //根据账号查找员工
+    public static function getEmployeeNameToUserName($username){
+        $suffix = Yii::app()->params['envSuffix'];
+        $row = Yii::app()->db->createCommand()->select("b.code,b.name")->from("hr{$suffix}.hr_binding a")
+            ->leftJoin("hr{$suffix}.hr_employee b","a.employee_id=b.id")
+            ->where("user_id=:user_id",array(":user_id"=>$username))->queryRow();
+        if($row){
+            return $row["name"]."({$row["code"]})";
+        }else{
+            return "";
+        }
+    }
+
 	public function retrieveData($index,$bool=true)
 	{
         $suffix = Yii::app()->params['envSuffix'];

@@ -228,9 +228,9 @@ $this->pageTitle=Yii::app()->name . ' - TreatyService Form';
                         array('readonly'=>(true))
                     ); ?>
                 </div>
-                <?php echo $form->labelEx($model,'treaty_num',array('class'=>"col-lg-2 control-label")); ?>
+                <?php echo TbHtml::label(Yii::t("treaty","apply employee"),'',array('class'=>"col-lg-2 control-label")); ?>
                 <div class="col-lg-2">
-                    <?php echo $form->textField($model, 'treaty_num',
+                    <?php echo TbHtml::textField("employee_name", TreatyServiceForm::getEmployeeNameToUserName($model->apply_lcu),
                         array('readonly'=>(true))
                     ); ?>
                 </div>
@@ -256,6 +256,12 @@ $this->pageTitle=Yii::app()->name . ' - TreatyService Form';
                     echo TbHtml::textField("state_type",TreatyServiceList::getStateStr($model->state_type),
                         array('readonly'=>(true)));
                     ?>
+                </div>
+                <?php echo $form->labelEx($model,'treaty_num',array('class'=>"col-lg-2 control-label")); ?>
+                <div class="col-lg-2">
+                    <?php echo $form->textField($model, 'treaty_num',
+                        array('readonly'=>(true))
+                    ); ?>
                 </div>
             </div>
 

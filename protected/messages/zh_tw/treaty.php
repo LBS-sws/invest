@@ -64,5 +64,6 @@ return array(
     'Project sourcing'=>'項目尋源',
     'Project screening'=>'項目初篩',
     'Intention negotiate'=>'意向洽談',
+    'apply employee'=>'記錄員工',
 );
 ?>
