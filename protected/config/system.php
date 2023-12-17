@@ -52,6 +52,13 @@ return array(
         'name'=>'Sales',
         'icon'=>'fa fa-suitcase',
     ),
+    'nu'=>array(
+        'webroot'=>'https://dms.lbsapps.cn/nu',
+        'name'=>'New United',
+        'icon'=>'fa fa-suitcase',
+        'param'=>'/admin',
+        'script'=>'goNewUnited',
+    ),
     'onlib'=>array(
         'webroot'=>'https://onlib.lbsapps.com/seeddms',
         'script'=>'remoteLoginOnlib',
