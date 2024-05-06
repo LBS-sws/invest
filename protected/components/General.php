@@ -65,6 +65,39 @@ class General extends CGeneral {
             }
         }
     }
+
+    public static function getCityAllowAll(){
+        $city_allow = Yii::app()->user->city_allow();
+        $city = Yii::app()->user->city();
+        $suffix = Yii::app()->params['envSuffix'];
+        $sql = "select ka_bool from security{$suffix}.sec_city where code='{$city}'";
+        $row = Yii::app()->db->createCommand($sql)->queryRow();
+        if($row&&$row["ka_bool"]==2){//当前账号为区域性
+            $cityArea = self::getCityArea($city);
+            $city_allow.=empty($city_allow)?"":",";
+            $city_allow.="'".implode("','",$cityArea)."'";
+            return $city_allow;
+        }else{
+            return $city_allow;
+        }
+    }
+
+    public static function getCityArea($city){
+        $list = array();
+        $list[]=$city;
+        $suffix = Yii::app()->params['envSuffix'];
+        $sql = "select code from security{$suffix}.sec_city where region='{$city}' AND ka_bool=2";
+        $rows = Yii::app()->db->createCommand($sql)->queryAll();
+        if($rows){//当前账号为区域性
+            foreach ($rows as $row){
+                if(!in_array($row["code"],$list)){
+                    $temp = self::getCityArea($row["code"]);
+                    $list = array_merge($list,$temp);
+                }
+            }
+        }
+        return $list;
+    }
 }
 
 ?>

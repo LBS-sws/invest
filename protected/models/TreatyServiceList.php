@@ -26,8 +26,7 @@ class TreatyServiceList extends CListPageModel
 	public function retrieveDataByPage($pageNum=1)
 	{
 		$suffix = Yii::app()->params['envSuffix'];
-        $city = Yii::app()->user->city();
-        $city_allow = Yii::app()->user->city_allow();
+        $city_allow = General::getCityAllowAll();
         $uid = Yii::app()->user->id;
 		$sql1 = "select a.*,b.name as city_name 
 				from inv_treaty a

@@ -133,8 +133,7 @@ class TreatyServiceForm extends CFormModel
 	{
         $suffix = Yii::app()->params['envSuffix'];
         $uid = Yii::app()->user->id;
-        $city = Yii::app()->user->city();
-        $city_allow = Yii::app()->user->city_allow();
+        $city_allow = General::getCityAllowAll();
         $sql = "select a.*,docman$suffix.countdoc('TREATY',a.id) as treatydoc 
 				from inv_treaty a
 				where (a.lcu_city in ({$city_allow}) or a.apply_lcu='{$uid}') and a.id='$index'
