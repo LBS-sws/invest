@@ -26,17 +26,18 @@ class TreatyServiceList extends CListPageModel
 	public function retrieveDataByPage($pageNum=1)
 	{
 		$suffix = Yii::app()->params['envSuffix'];
+        $city = Yii::app()->user->city();
         $city_allow = Yii::app()->user->city_allow();
         $uid = Yii::app()->user->id;
 		$sql1 = "select a.*,b.name as city_name 
 				from inv_treaty a
 				LEFT JOIN security{$suffix}.sec_city b on a.city_allow=b.code
-				where (a.city_allow in ({$city_allow}) or a.apply_lcu='{$uid}')
+				where (a.lcu_city in ({$city_allow}) or a.apply_lcu='{$uid}')
 			";
 		$sql2 = "select count(a.id)
 				from inv_treaty a
 				LEFT JOIN security{$suffix}.sec_city b on a.city_allow=b.code
-				where (a.city_allow in ({$city_allow}) or a.apply_lcu='{$uid}')
+				where (a.lcu_city in ({$city_allow}) or a.apply_lcu='{$uid}')
 			";
 		$clause = "";
 		if (!empty($this->searchField) && !empty($this->searchValue)) {

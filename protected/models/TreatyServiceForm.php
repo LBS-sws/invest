@@ -133,10 +133,11 @@ class TreatyServiceForm extends CFormModel
 	{
         $suffix = Yii::app()->params['envSuffix'];
         $uid = Yii::app()->user->id;
+        $city = Yii::app()->user->city();
         $city_allow = Yii::app()->user->city_allow();
         $sql = "select a.*,docman$suffix.countdoc('TREATY',a.id) as treatydoc 
 				from inv_treaty a
-				where (a.city_allow in ({$city_allow}) or a.apply_lcu='{$uid}') and a.id='$index'
+				where (a.lcu_city in ({$city_allow}) or a.apply_lcu='{$uid}') and a.id='$index'
 			";
 		$row = Yii::app()->db->createCommand($sql)->queryRow();
 		if ($row!==false) {
@@ -326,8 +327,8 @@ class TreatyServiceForm extends CFormModel
 				break;
 			case 'new':
 				$sql = "insert into inv_treaty(
-						lbs_city,appeal_text,trait_text,holder_text,capital_text,city_allow, city, apply_date, apply_lcu, company_name, company_date, agent_user, agent_phone, annual_money, rate_num, account_type, technician_type, sales_source, rate_government, remark, lcu) values (
-						:lbs_city,:appeal_text,:trait_text,:holder_text,:capital_text,:city_allow, :city, :apply_date, :apply_lcu, :company_name, :company_date, :agent_user, :agent_phone, :annual_money, :rate_num, :account_type, :technician_type, :sales_source, :rate_government, :remark, :lcu)";
+						lbs_city,lcu_city,appeal_text,trait_text,holder_text,capital_text,city_allow, city, apply_date, apply_lcu, company_name, company_date, agent_user, agent_phone, annual_money, rate_num, account_type, technician_type, sales_source, rate_government, remark, lcu) values (
+						:lbs_city,:lcu_city,:appeal_text,:trait_text,:holder_text,:capital_text,:city_allow, :city, :apply_date, :apply_lcu, :company_name, :company_date, :agent_user, :agent_phone, :annual_money, :rate_num, :account_type, :technician_type, :sales_source, :rate_government, :remark, :lcu)";
 				break;
 			case 'edit':
 				$sql = "update inv_treaty set 
@@ -416,6 +417,8 @@ class TreatyServiceForm extends CFormModel
 			$command->bindParam(':city',$this->city,PDO::PARAM_STR);
 		if (strpos($sql,':city_allow')!==false)
 			$command->bindParam(':city_allow',$this->city_allow,PDO::PARAM_STR);
+		if (strpos($sql,':lcu_city')!==false)
+			$command->bindParam(':lcu_city',$city,PDO::PARAM_STR);
 
 		if (strpos($sql,':apply_lcu')!==false)
 			$command->bindParam(':apply_lcu',$uid,PDO::PARAM_STR);
