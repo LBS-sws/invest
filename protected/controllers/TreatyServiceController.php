@@ -24,7 +24,7 @@ class TreatyServiceController extends Controller
 	{
 		return array(
 			array('allow', 
-				'actions'=>array('new','edit','delete','save','fileRemove','fileupload'),
+				'actions'=>array('new','edit','delete','save','downExcel','fileRemove','fileupload'),
 				'expression'=>array('TreatyServiceController','allowReadWrite'),
 			),
 			array('allow', 
@@ -36,6 +36,23 @@ class TreatyServiceController extends Controller
 			),
 		);
 	}
+
+    public function actionDownExcel($pageNum=0)
+    {
+        $model = new TreatyServiceList();
+        if (isset($_POST['TreatyServiceList'])) {
+            $model->attributes = $_POST['TreatyServiceList'];
+        } else {
+            $session = Yii::app()->session;
+            if (isset($session['treatyService_c01']) && !empty($session['treatyService_c01'])) {
+                $criteria = $session['treatyService_c01'];
+                $model->setCriteria($criteria);
+            }
+        }
+        $model->determinePageNum($pageNum);
+        $data = $model->excelDataByPage($model->pageNum);
+        $model->downExcel();
+    }
 
 	public function actionIndex($pageNum=0) 
 	{

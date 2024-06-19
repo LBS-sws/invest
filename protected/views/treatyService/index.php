@@ -32,6 +32,13 @@ $this->pageTitle=Yii::app()->name . ' - TreatyService';
 				)); 
 		?>
 	</div>
+	<div class="btn-group pull-right" role="group">
+		<?php
+        echo TbHtml::button('<span class="fa fa-download"></span> '.Yii::t('dialog','Download'), array(
+            'submit'=>Yii::app()->createUrl('treatyService/downExcel'),
+        ));
+		?>
+	</div>
 	</div></div>
     <?php
     $searchArr=array(

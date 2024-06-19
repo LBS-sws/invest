@@ -65,5 +65,12 @@ return array(
     'Project screening'=>'項目初篩',
     'Intention negotiate'=>'意向洽談',
     'apply employee'=>'記錄員工',
+
+    'number no'=>'序號',
+    'company city'=>'客戶所在城市',
+    'history text'=>'目前所處階段',
+    'next work'=>'下步工作',
+    'other text'=>'其他（備註）',
+    'project form'=>'項目來源',
 );
 ?>
