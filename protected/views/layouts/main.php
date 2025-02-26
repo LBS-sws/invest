@@ -9,20 +9,16 @@
 
 		$sfile = Yii::app()->baseUrl.'/js/dms.js';
 		Yii::app()->clientScript->registerScriptFile($sfile,CClientScript::POS_HEAD);
-		Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/lbs.css');
 	?>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="language" content="<?php echo Yii::app()->language; ?>" />
-    <style type="text/css">
-        .skin-red-light .main-header .logo,.skin-red-light .main-header .navbar{ background:#a55248 !important;}
-    </style>
-
+	
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 
 <body class="hold-transition <?php echo Yii::app()->params['appcolor']; ?> sidebar-mini">
-<div class="wrapper">
+<div class="wrapper" style="overflow: hidden;">
 
 	<header class="main-header">
 		<!-- Logo -->

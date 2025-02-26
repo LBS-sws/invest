@@ -146,14 +146,14 @@ class User extends CActiveRecord
 		$command->execute();
 	}
 	
-	public function getUserInfoImage($fieldId) {
+	public function getUserInfoImage($fieldId, $decode=true) {
 		$suffix = Yii::app()->params['envSuffix'];
 
 		$rtn = '';
 		$username = $this->username;
 		$sql = "select field_blob from security$suffix.sec_user_info where Lower(username)='$username' and field_id='$fieldId'";
 		$row = Yii::app()->db->createCommand($sql)->queryRow();
-		if ($row!==false) $rtn = base64_decode($row['field_blob']);
+		if ($row!==false) $rtn = $decode ? base64_decode($row['field_blob']) : $row['field_blob'];
 		return $rtn;
 	}
 
@@ -167,4 +167,15 @@ class User extends CActiveRecord
 		if ($row!==false) $rtn = $row['field_value'];
 		return $rtn;
 	}
+
+    public function resetPassword($username,$password)
+    {
+        $result = self::model()->find('LOWER(username)=?',array($username));
+        if($result==null) return ['status'=>false,'msg'=>'未找到当前账号！'];
+        $result->password = $this->hashPassword($password,$this->salt);
+        $result->is_replace_password = 1;
+        $res = $result->save();
+        if(!$res) return ['status'=>false,'msg'=>'密码重置失败！'];
+        return ['status'=>true,'msg'=>''];
+    }
 }
